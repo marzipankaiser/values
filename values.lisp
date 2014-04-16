@@ -1,5 +1,5 @@
 ;;;;; VALUES library ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;  by marzipankaiser (marzipankaiser<AT>gmail.com)
+;  by marzipankaiser (marzipankaiser@gmail.com)
 ;  Dependencies: 
 ;  - closer-mop (http://common-lisp.net/project/closer/closer-mop.html)
 ;  Allows to make variables and slots that change behavior
