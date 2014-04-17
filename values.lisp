@@ -62,7 +62,7 @@
 
 ;;; Reverse of value-quote
 (defmacro value-unquote (val)
-  `(let ((*value-quote-activated* NIL)) ,val))
+  `(let ((*value-quote-activated* NIL)) (get-value ,val)))
 
 ;;; setf with value-quote'd values
 (defmacro setf-ext (&rest name-value-pairs)
