@@ -50,7 +50,7 @@ Class slots
 ===========
 
 There is a class called `metaclass-ext-mixin`. Using a metaclass that inherits from this results in slots that have the effects described above for variables defined using `*-ext` forms.
-There is a `standard-class-ext` (which is simply a metaclass inheriting from `standard-class` and `metaclass-ext-mixin` and defining a `validat-superclass` method), so you can use this:
+There is a `standard-class-ext` (which is simply a metaclass inheriting from `standard-class` and `metaclass-ext-mixin` and defining a `validate-superclass` method), so you can use this:
 
     (defclass foo ()
 	   ((bar :accessor foo-bar :initarg :bar))
