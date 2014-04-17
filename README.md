@@ -9,9 +9,9 @@ Basic usage
 ===========
 
 	(defvar-ext *a* (let ((x 0)) (lazy (incf x))))
-	*a* => 1
-	*a* => 2
-	...
+	*a* ;;=> 1
+	*a* ;;=> 2
+	;...
 
 When you use a variable defined using one of `defvar-ext`, `defparameter-ext`, `let-ext` or `let*-ext`, those will actually be symbol-macrolets (_Notice:_ They will not be `boundp`) and the get-value generic function will be called on the value (this defaults to identity) and set-value will be called when setting them (for the arguments of set-value see values.lisp). Thus, you can have something like variables that can be lazily evaluated or like above counters.
 
@@ -24,16 +24,16 @@ values can also be used to trace variables, like this:
 				   traced-value-new)))
     
     *b*
-    -> *b*: GET
-    => 2
+    ;;-> *b*: GET
+    ;;=> 2
     
     (setf *b* 3)
-    -> *b*: SET to 3
-    => 3
+    ;;-> *b*: SET to 3
+    ;;=> 3
     
     *b*
-    -> *b*: GET
-    => 3
+    ;;-> *b*: GET
+    ;;=> 3
 
 Value quotation
 ===============
@@ -41,11 +41,28 @@ Value quotation
 If you want to get at the *real* value of the variable, i.e. the value object, you can use `value-quote` like this:
     
     (defvar-ext *b* (lazy 2))
-    *b* => 2
-    (value-quote *b*) => #<VALUES::LAZY-VALUE ...>
+    *b* ;;=> 2
+    (value-quote *b*) ;;=> #<VALUES::LAZY-VALUE ...>
 
 All `*-ext` forms implicitly `value-quote` their arguments (the initial values). This includes `setf-ext` which is meant for this purpose (You can use `setf` instead if you don't need `value-quote`'d values). To undo `value-quote` you can simply use `value-unquote`.
 
+Class slots
+===========
+
+There is a class called `metaclass-ext-mixin`. Using a metaclass that inherits from this results in slots that have the effects described above for variables defined using `*-ext` forms.
+There is a `standard-class-ext` (which is simply a metaclass inheriting from `standard-class` and `metaclass-ext-mixin` and defining a `validat-superclass` method), so you can use this:
+
+    (defclass foo ()
+	   ((bar :accessor foo-bar :initarg :bar))
+	   (:metaclass standard-class-ext))
+    (defvar *foo* (make-instance 'foo 
+				      :bar (let ((x 0)) 
+					     (lazy (incf x)))))
+    (foo-bar *foo*) ;;=> 1
+    (foo-bar *foo*) ;;=> 2
+    ;...
+
+This depends on the Metaobject Protocol. To make this possible in a portable way, values uses the package [closer-mop](http://common-lisp.net/project/closer/closer-mop.html) (though, it shouldn't be to hard to port to e.g. the sbcl implementation of the MOP)
 
 Defining own value classes
 ==========================
