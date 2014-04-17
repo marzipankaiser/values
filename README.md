@@ -35,6 +35,22 @@ values can also be used to trace variables, like this:
     -> *b*: GET
     => 3
 
+Defining own value classes
+==========================
+
+If you want your own class to affect the behavior of the variable defined using a `*-ext` form, you can specialize on the following methods:
+
+<pre><b>get-value</b> value</pre>
+ is called when the value of the variable is read. value is the current value of the variable (i.e. an instance of your own class).
+
+
+<pre><b>set-value</b> value setter-function new-values</pre> 
+ is called when the value of the variable is written (using `setf` or `setf-ext`). It takes these arguments:
+
+ * `value` - this is the current value (*before* setting) of the variable (i.e. an instance of your own class)
+ * `setter-function` - this is a function that, if called, sets the variable to the new value. It takes as many optional arguments as there are elements in `new-values` that default to the values in `new-values` (and can be used to change the value that is to be set)
+ * `new-values` - This is a list of the new values of the variable. (This will usually be only one. This is the list of the values of the variables returned as the third return value of `get-setf-expansion`)
+
 Further explanation
 ===================
 Further explanation can be found in `values.lisp` (as comments) and may be added here somewhen...
