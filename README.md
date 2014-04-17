@@ -35,6 +35,18 @@ values can also be used to trace variables, like this:
     -> *b*: GET
     => 3
 
+Value quotation
+===============
+
+If you want to get at the *real* value of the variable, i.e. the value object, you can use `value-quote` like this:
+    
+    (defvar-ext *b* (lazy 2))
+    *b* => 2
+    (value-quote *b*) => #<VALUES::LAZY-VALUE ...>
+
+All `*-ext` forms implicitly `value-quote` their arguments (the initial values). This includes `setf-ext` which is meant for this purpose (You can use `setf` instead if you don't need `value-quote`'d values). To undo `value-quote` you can simply use `value-unquote`.
+
+
 Defining own value classes
 ==========================
 
