@@ -7,43 +7,7 @@
 ;  e.g. make lazy values)
 ; License: see LICENSE file
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defpackage #:values 
-  (:use :cl :closer-mop)
-  (:shadowing-import-from :closer-mop 
-			  #:defmethod
-			  #:slot-value-using-class
-			  #:defgeneric
-			  #:standard-generic-function)
-  (:export #:get-value #:set-value ; value protocol
-
-	   #:defvar-ext #:defparameter-ext ; variable definition
-	   #:let-ext #:let*-ext            ;  / binding
-
-	   #:value-quote #:value-unquote ; suppress expansion
-	   #:setf-ext ; value-quote'd assignment
-	   
-	   #:metaclass-ext-mixin ; metaclasses for values in slots
-	   #:standard-class-ext
-
-	   ;;;; Default value types
-	   #:lazy
-	   #:traced #:traced-value-op #:traced-value-new))
 (in-package #:values)
-
-;;;; Utilities
-(eval-when (:compile-toplevel :load-toplevel :execute)
-  (defun mk-string (&rest args)
-    (with-output-to-string (*standard-output*)
-      (dolist (arg args)
-	(princ arg))))
-  (defun sym (&rest args)
-    (intern (apply 'mk-string args)))
-  (defmacro in ((value &key (test 'eq)) &rest values)
-    (let ((gs (gensym)))
-      `(let ((,gs ,value)) 
-	 (or ,@(mapcar (lambda (x) `(,test ,gs ,x))
-		       values))))))
 
 ;;; Called when value of variable should be gotten
 (defgeneric get-value (var)

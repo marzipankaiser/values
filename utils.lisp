@@ -7,13 +7,16 @@
 ;  e.g. make lazy values)
 ; License: see LICENSE file
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(asdf:defsystem #:values
-  :depends-on (:closer-mop)
-  :description "Make variables change get/set behavior depending on value."
-  :version "0.1"
-  :author "marzipankaiser <marzipankaiser@gmail.com>"
-  :licence "MIT License"
-  :serial T
-  :components ((:file "package")
-	       (:file "utils")
-	       (:file "values")))
+(in-package #:values)
+
+(defun mk-string (&rest args)
+  (with-output-to-string (*standard-output*)
+    (dolist (arg args)
+      (princ arg))))
+(defun sym (&rest args)
+  (intern (apply 'mk-string args)))
+(defmacro in ((value &key (test 'eq)) &rest values)
+  (let ((gs (gensym)))
+    `(let ((,gs ,value)) 
+       (or ,@(mapcar (lambda (x) `(,test ,gs ,x))
+		     values)))))
